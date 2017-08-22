@@ -150,26 +150,60 @@ use Gandung\PropertyAccessor\Tests\Fixtures\Foo;
 
 $foo = new Foo;
 $accessor = PropertyAccessorFacade::getAccessor()->enableMagicMethod();
+// This automatically call __get to reading from property value.
 $value = $accessor->getValue($foo, 'data');
 
 echo sprintf("%s\n", is_null($value) ? "null" : $value);
 ```
 
-This will outputting "null" because no data has been written to object property named 'data'
+This will output "null" because no data has been written to object property named 'data'
 
 ### Writing to object instance using __set magic method
+
 ```php
 use Gandung\PropertyAccessor\PropertyAccessorFacade;
 use Gandung\PropertyAccessor\Tests\Fixtures\Foo;
 
 $foo = new Foo;
 $accessor = PropertyAccessorFacade::getAccessor()->enableMagicMethod();
+// This automatically call __set to writing to property value.
 $accessor->setValue($foo, 'data', 'this is a text.');
+// This automatically call __get to reading from property value.
 $value = $accessor->getValue($foo, 'data');
 
 echo sprintf("%s\n", is_null($value) ? "null" : $value);
 ```
 
-This will outputting "this is a text.".
+This will output "this is a text.".
+
+### Reading from object instance using class defined getter method
+
+```php
+use Gandung\PropertyAccessor\PropertyAccessorFacade;
+use Gandung\PropertyAccessor\Tests\Fixtures\Foo;
+
+$foo = new Foo;
+$accessor = PropertyAccessorFacade::getAccessor();
+// This automatically call getData() to reading from property value.
+$value = $accessor->getValue($foo, 'data');
+
+echo sprintf("%s\n", is_null($value) ? "null" : $value);
+```
+
+### Writing to object instance using class defined setter method
+
+```php
+use Gandung\PropertyAccessor\PropertyAccessorFacade;
+use Gandung\PropertyAccessor\Tests\Fixtures\Foo;
+
+$foo = new Foo;
+$accessor = PropertyAccessorFacade::getAccessor();
+// This automatically call setData() to writing to property value.
+$accessor->setValue($foo, 'data', 'this is a text.');
+// This automatically call getData() to reading from property value.
+$value = $accessor->getValue($foo, 'data');
+
+echo sprintf("%s\n", is_null($value) ? "null" : $value);
+```
 
 PR are always welcome :))
